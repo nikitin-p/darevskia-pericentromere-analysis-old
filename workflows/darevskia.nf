@@ -7,11 +7,13 @@
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowDarevskia.initialise(params, log)
+//WorkflowDarevskia.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
+// def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
+
+def checkPathParamList = [ params.input ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
@@ -23,8 +25,8 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 ========================================================================================
 */
 
-ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yaml", checkIfExists: true)
-ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
+// ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yaml", checkIfExists: true)
+// ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
 
 /*
 ========================================================================================
@@ -51,14 +53,14 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check' addParams( opti
 ========================================================================================
 */
 
-def multiqc_options   = modules['multiqc']
-multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"$params.multiqc_title\""]) : ''
+// def multiqc_options   = modules['multiqc']
+// multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"$params.multiqc_title\""]) : ''
 
 //
 // MODULE: Installed directly from nf-core/modules
 //
 include { FASTQC  } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
-include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
+// include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
 
 /*
 ========================================================================================
@@ -67,7 +69,7 @@ include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( op
 */
 
 // Info required for completion email and summary
-def multiqc_report = []
+// def multiqc_report = []
 
 workflow DAREVSKIA {
 
@@ -85,6 +87,7 @@ workflow DAREVSKIA {
     //
     FASTQC (
         INPUT_CHECK.out.reads
+        // ch_input
     )
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
 
@@ -106,6 +109,7 @@ workflow DAREVSKIA {
     //
     // MODULE: MultiQC
     //
+    /*
     workflow_summary    = WorkflowDarevskia.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
@@ -121,6 +125,7 @@ workflow DAREVSKIA {
     )
     multiqc_report       = MULTIQC.out.report.toList()
     ch_software_versions = ch_software_versions.mix(MULTIQC.out.version.ifEmpty(null))
+    */
 }
 
 /*
