@@ -1,0 +1,20 @@
+{
+    "name": "nf-core/darevskia",
+    "homePage": "https://github.com/nf-core/darevskia",
+    "repos": {
+        "nf-core/modules": {
+            "bowtie2/align": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "bowtie2/build": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "fastqc": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "multiqc": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            }
+        }
+    }
+}
