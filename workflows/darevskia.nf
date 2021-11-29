@@ -17,7 +17,13 @@ def checkPathParamList = [ params.input ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+if (params.input) { 
+    ch_input = file(params.input)
+    paired_fastq = fromFilePairs('/home/nikitinp/lizards/pipeline/subsample/*_sample_R{1,2}.fastq.gz')
+    db = path('/home/nikitinp/lizards/pipeline/magicblast_db/*.tar.gz')
+} else { 
+    exit 1, 'Input samplesheet not specified!' 
+}
 
 /*
 ========================================================================================
@@ -89,6 +95,7 @@ workflow DAREVSKIA {
         INPUT_CHECK.out.reads
         // ch_input
     )
+    MAGICBLAST (paired_fastq, db)
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
 
     //
