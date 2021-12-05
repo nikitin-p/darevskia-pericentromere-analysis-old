@@ -8,7 +8,7 @@ options        = initOptions([:])
 
 
 process MAGICBLAST {
-    tag "$meta.id"
+    // tag "$meta.id"
     label 'process_long'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
