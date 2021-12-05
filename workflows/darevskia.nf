@@ -7,7 +7,7 @@
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-//WorkflowDarevskia.initialise(params, log)
+WorkflowDarevskia.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
