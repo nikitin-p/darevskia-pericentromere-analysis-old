@@ -7,7 +7,7 @@
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowDarevskia.initialise(params, log)
+// WorkflowDarevskia.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
@@ -97,7 +97,7 @@ workflow DAREVSKIA {
         INPUT_CHECK.out.reads
         // ch_input
     )
-    MAGICBLAST (paired_fastq, db)
+    // MAGICBLAST (paired_fastq, db)
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
 
     //
