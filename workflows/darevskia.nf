@@ -26,6 +26,7 @@ if (params.input) {
 }
 
 Channel.fromFilePairs('/home/nikitinp/lizards/pipeline/subsample/*_sample_R{1,2}.fastq.gz').view()
+Channel.fromPath('/home/nikitinp/lizards/pipeline/magicblast_db/*.tar.gz').view()
 
 /*
 ========================================================================================
