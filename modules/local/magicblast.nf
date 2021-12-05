@@ -44,6 +44,6 @@ process MAGICBLAST {
         -out ${prefix}.gz \\
         
 
-    magicblast -version | head -1 | awk '{print $2}' > ${software}.version.txt
+    magicblast -version | head -1 | awk '{print \$2}' > ${software}.version.txt
     """
 }
