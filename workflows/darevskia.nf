@@ -66,6 +66,8 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check' addParams( opti
 // MODULE: Installed directly from nf-core/modules
 //
 include { FASTQC  } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
+
+include { MAGICBLAST  } from '../modules/local/magicblast'  addParams( options: modules['magicblast'] )
 // include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
 
 /*
