@@ -3,7 +3,9 @@ include { initOptions; saveFiles; getSoftwareName } from './functions'
 include { trimSuffix } from './custom_functions'
 
 params.options = [:]
-options        = initOptions(params.options)
+// options        = initOptions(params.options)
+options        = initOptions([:])
+
 
 process MAGICBLAST {
     tag "$meta.id"
