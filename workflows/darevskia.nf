@@ -97,7 +97,7 @@ workflow DAREVSKIA {
         INPUT_CHECK.out.reads
         // ch_input
     )
-    // MAGICBLAST (paired_fastq, db)
+    MAGICBLAST (paired_fastq, db)
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
 
     //
