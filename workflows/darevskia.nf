@@ -25,6 +25,8 @@ if (params.input) {
     exit 1, 'Input samplesheet not specified!' 
 }
 
+Channel.fromFilePairs('/home/nikitinp/lizards/pipeline/subsample/*_sample_R{1,2}.fastq.gz').view()
+
 /*
 ========================================================================================
     CONFIG FILES
