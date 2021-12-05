@@ -27,12 +27,12 @@ process MAGICBLAST {
     path "*.version.txt"          , emit: version
 
     script:
-    def trimSuffix(String original, String suffix) {
-	    if(original.endsWith(suffix)) {
-	        return original.substring(0, original.length() - suffix.length())
-	    }
-	    return original
-    }
+    // def trimSuffix(String original, String suffix) {
+	//     if(original.endsWith(suffix)) {
+	//         return original.substring(0, original.length() - suffix.length())
+	//     }
+	//     return original
+    // }
     def software = getSoftwareName(task.process)
     def prefix   = "${trimSuffix(paired_fastq[0], '_R1.fastq.gz')}_${trimSuffix(db, '.tar.gz')}"
 
