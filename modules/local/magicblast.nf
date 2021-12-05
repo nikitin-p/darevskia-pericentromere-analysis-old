@@ -1,5 +1,6 @@
 // Import generic module functions
 include { initOptions; saveFiles; getSoftwareName } from './functions'
+include { trimSuffix } from './custom_functions'
 
 params.options = [:]
 options        = initOptions(params.options)
@@ -27,12 +28,6 @@ process MAGICBLAST {
     path "*.version.txt"          , emit: version
 
     script:
-    // def trimSuffix(String original, String suffix) {
-	//     if(original.endsWith(suffix)) {
-	//         return original.substring(0, original.length() - suffix.length())
-	//     }
-	//     return original
-    // }
     def software = getSoftwareName(task.process)
     def prefix   = "${trimSuffix(paired_fastq[0], '_R1.fastq.gz')}_${trimSuffix(db, '.tar.gz')}"
 
