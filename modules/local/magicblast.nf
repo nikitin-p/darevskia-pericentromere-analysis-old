@@ -6,9 +6,8 @@ params.options = [:]
 // options        = initOptions(params.options)
 options        = initOptions([:])
 
-
 process MAGICBLAST {
-    // tag "$meta.id"
+    tag "$meta.id"
     label 'process_long'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
@@ -22,7 +21,8 @@ process MAGICBLAST {
     }
 
     input:
-    path(paired_fastq)
+    // path(paired_fastq)
+    tuple val(meta), path(reads)
     each path(db)
 
     output:
@@ -31,7 +31,7 @@ process MAGICBLAST {
 
     script:
     def software = getSoftwareName(task.process)
-    def prefix   = "${trimSuffix(paired_fastq[0], '_R1.fastq.gz')}_${trimSuffix(db, '.tar.gz')}"
+    def prefix   = "${trimSuffix(reads[0].baseName, '_R1.fastq.gz')}_${trimSuffix(db, '.tar.gz')}"
 
     """
     magicblast \\
@@ -40,8 +40,8 @@ process MAGICBLAST {
         -infmt fastq \\
         -outfmt tabular
         -gzo \\
-        -query ${paired_fastq[0]} \\
-        -query_mate ${paired_fastq[1]} \\
+        -query ${reads[0]} \\
+        -query_mate ${reads[1]} \\
         -db ${db} \\
         -out ${prefix}.gz \\
         

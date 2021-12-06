@@ -25,8 +25,8 @@ if (params.input) {
     exit 1, 'Input samplesheet not specified!' 
 }
 
-Channel.fromFilePairs('/home/nikitinp/lizards/pipeline/subsample/*_sample_R{1,2}.fastq.gz').view()
-Channel.fromPath('/home/nikitinp/lizards/pipeline/magicblast_db/*.tar.gz').view()
+// Channel.fromFilePairs('/home/nikitinp/lizards/pipeline/subsample/*_sample_R{1,2}.fastq.gz').view()
+// Channel.fromPath('/home/nikitinp/lizards/pipeline/magicblast_db/*.tar.gz').view()
 
 /*
 ========================================================================================
@@ -100,7 +100,7 @@ workflow DAREVSKIA {
         INPUT_CHECK.out.reads
         // ch_input
     )
-    // MAGICBLAST (paired_fastq, db)
+    MAGICBLAST (INPUT_CHECK.out.reads, db)
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
 
     //
