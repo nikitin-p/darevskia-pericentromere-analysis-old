@@ -20,7 +20,8 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 if (params.input) { 
     ch_input = file(params.input)
     paired_fastq = Channel.fromFilePairs('/home/nikitinp/lizards/pipeline/subsample/*_sample_R{1,2}.fastq.gz')
-    db = Channel.fromPath('/home/nikitinp/lizards/pipeline/magicblast_db/*.tar.gz')
+    // db = Channel.fromPath('/home/nikitinp/lizards/pipeline/magicblast_db/*')
+    db = Channel.fromList( ['/home/nikitinp/lizards/pipeline/magicblast_db/ref_prok_rep_genomes.00', '/home/nikitinp/lizards/pipeline/magicblast_db/ref_prok_rep_genomes.01'] )
 } else { 
     exit 1, 'Input samplesheet not specified!' 
 }
