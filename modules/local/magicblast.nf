@@ -24,7 +24,7 @@ process MAGICBLAST {
     // path(paired_fastq)
     tuple val(meta), path(reads)
     each path(db)
-    path(db_files)
+    //path(db_files)
 
     output:
     path("*.gz"), emit: mb_results
