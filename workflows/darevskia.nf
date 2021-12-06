@@ -96,27 +96,28 @@ workflow DAREVSKIA {
     //
     // MODULE: Run FastQC
     //
-    FASTQC (
-        INPUT_CHECK.out.reads
+    // FASTQC (
+        // INPUT_CHECK.out.reads
         // ch_input
-    )
-    MAGICBLAST (paired_fastq, db)
-    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
+    // )
+    // MAGICBLAST (paired_fastq, db)
+    INPUT_CHECK.out.reads.view()
+    // ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
 
     //
     // MODULE: Pipeline reporting
     //
-    ch_software_versions
-        .map { it -> if (it) [ it.baseName, it ] }
-        .groupTuple()
-        .map { it[1][0] }
-        .flatten()
-        .collect()
-        .set { ch_software_versions }
+    // ch_software_versions
+    //     .map { it -> if (it) [ it.baseName, it ] }
+    //     .groupTuple()
+    //     .map { it[1][0] }
+    //     .flatten()
+    //     .collect()
+    //     .set { ch_software_versions }
 
-    GET_SOFTWARE_VERSIONS (
-        ch_software_versions.map { it }.collect()
-    )
+    // GET_SOFTWARE_VERSIONS (
+    //     ch_software_versions.map { it }.collect()
+    // )
 
     //
     // MODULE: MultiQC
