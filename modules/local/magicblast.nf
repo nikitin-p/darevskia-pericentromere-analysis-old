@@ -31,7 +31,8 @@ process MAGICBLAST {
 
     script:
     def software = getSoftwareName(task.process)
-    def prefix   = "${trimSuffix(reads[0].baseName, '_R1.fastq.gz')}_${trimSuffix(db, '.tar.gz')}"
+    // def prefix   = "${trimSuffix(reads[0].baseName, '_R1.fastq.gz')}_${trimSuffix(db, '.tar.gz')}"
+    def prefix   = "${reads[0].simpleName}_${db.simpleName}"
 
     """
     magicblast \\
