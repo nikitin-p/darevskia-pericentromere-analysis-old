@@ -39,7 +39,7 @@ process MAGICBLAST {
         $options.args \\
         -num_threads $task.cpus \\
         -infmt fastq \\
-        -outfmt tabular
+        -outfmt tabular \\
         -gzo \\
         -query ${reads[0]} \\
         -query_mate ${reads[1]} \\
