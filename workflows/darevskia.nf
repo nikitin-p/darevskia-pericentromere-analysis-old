@@ -93,25 +93,13 @@ workflow DAREVSKIA {
         ch_input
     )
 
-    INPUT_CHECK.out.reads.into {
-        ch_input_fastqc;
-        ch_input_magicblast
-    }
-
     //
     // MODULE: Run FastQC
     //
     FASTQC (
-        ch_input_fastqc
-        // INPUT_CHECK.out.reads
+        INPUT_CHECK.out.reads
         // ch_input
     )
-    
-    // MAGICBLAST (
-    //     ch_input_magicblast, 
-    //     db
-    // )
-
     // MAGICBLAST (paired_fastq, db)
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
 
