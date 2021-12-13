@@ -75,6 +75,9 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check' addParams( opti
 include { FASTQC  } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
 
 include { MAGICBLAST  } from '../modules/local/magicblast'  addParams( options: modules['magicblast'] )
+
+include { PARSE_MAGICBLAST  } from '../modules/local/parse_magicblast'  addParams( options: modules['parse_magicblast'] )
+
 // include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
 
 /*
@@ -104,9 +107,18 @@ workflow DAREVSKIA {
         INPUT_CHECK.out.reads
         // ch_input
     )
-    MAGICBLAST (INPUT_CHECK.out.reads, db_dir)
-    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
 
+    MAGICBLAST (
+        INPUT_CHECK.out.reads,
+        db_dir
+    )
+
+    PARSE_MAGICBLAST (
+        MAGICBLAST.out.mb_results
+    )
+
+    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
+    
     //
     // MODULE: Pipeline reporting
     //
