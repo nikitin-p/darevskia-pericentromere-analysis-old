@@ -41,13 +41,17 @@ process PARSE_MAGICBLAST {
     def input_name  = "${trimSuffix(magicblast_output.simpleName, '_output')}"
 
     """
+    READCOUNT=`<${magicblast_output} \\
+        tail -n +4 | \\
+        wc -l`
     <${magicblast_output} \\
         tail -n +4 | \\
         awk '{print \$2}' | \\
         sort | \\
         uniq -c | \\
         sort -k1,1nr | \\
-        head -5 > \\
+        head -5 |
+        awk -F" " -v var="\${READCOUNT}" '{print (\$1 / var * 100) "% " \$2}' > \\
         ${input_name}_histogram.txt
     """
 
