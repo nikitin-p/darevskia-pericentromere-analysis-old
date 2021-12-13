@@ -8,7 +8,8 @@ options        = initOptions([:])
 
 process PARSE_MAGICBLAST {
     // tag "$meta.id"
-    tag "$input_name"
+    // tag "$input_name"
+    tag "${trimSuffix(magicblast_output.simpleName, '_output')}"
     label 'process_low'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
