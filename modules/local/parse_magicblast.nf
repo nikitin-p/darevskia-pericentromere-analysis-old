@@ -1,14 +1,15 @@
 // Import generic module functions
 include { initOptions; saveFiles; getSoftwareName } from './functions'
-// include { trimSuffix } from './custom_functions'
+include { trimSuffix } from './custom_functions'
 
 params.options = [:]
 // options        = initOptions(params.options)
 options        = initOptions([:])
 
-process MAGICBLAST {
-    tag "$meta.id"
-    label 'process_long'
+process PARSE_MAGICBLAST {
+    // tag "$meta.id"
+    tag "$input_name"
+    label 'process_low'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:[:], publish_dir:getSoftwareName(task.process), meta:meta, publish_by_meta:['id']) }
@@ -22,30 +23,31 @@ process MAGICBLAST {
 
     input:
     // path(paired_fastq)
-    tuple val(meta), path(reads)
-    each path(db)
-    //path(db_files)
+    // tuple val(meta), path(reads)
+    // each path(db)
+    // path(db_files)
+    path(magicblast_output)
 
     output:
-    path("*_output.txt"), emit: mb_results
-    path "*.version.txt"          , emit: version
+    // path("*_output.txt"), emit: mb_result
+    path("*_histogram.txt"), emit: mb_histogram
+    // path "*.version.txt"          , emit: version
 
     script:
-    def software = getSoftwareName(task.process)
+    // def software = getSoftwareName(task.process)
     // def prefix   = "${trimSuffix(reads[0].baseName, '_R1.fastq.gz')}_${trimSuffix(db, '.tar.gz')}"
-    def prefix   = "${reads[0].simpleName}_${db.simpleName}"
+    // def prefix   = "${reads[0].simpleName}_${db.simpleName}"
+    def input_name  = "${trimSuffix(magicblast_output.simpleName, '_output')}"
 
     """
-    magicblast \\
-        $options.args \\
-        -num_threads $task.cpus \\
-        -infmt fastq \\
-        -outfmt tabular \\
-        -query ${reads[0]} \\
-        -query_mate ${reads[1]} \\
-        -db ${db}/${db.simpleName} \\
-        -out ${prefix}_output.txt \\
-
-    magicblast -version | head -1 | awk '{print \$2}' > ${software}.version.txt
+    <${magicblast_output} \\
+        tail -n +4 | \\
+        awk '{print \$2}' | \\
+        sort | \\
+        uniq -c | \\
+        sort -k1,1nr | \\
+        head -5 > \\
+        ${input_name}_histogram.txt
     """
+
 }
