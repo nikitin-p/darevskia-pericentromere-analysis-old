@@ -41,7 +41,6 @@ process MAGICBLAST {
         -num_threads $task.cpus \\
         -infmt fastq \\
         -outfmt tabular \\
-        -gzo \\
         -query ${reads[0]} \\
         -query_mate ${reads[1]} \\
         -db ${db}/${db.simpleName} \\
