@@ -27,7 +27,7 @@ process MAGICBLAST {
     //path(db_files)
 
     output:
-    path("*.gz"), emit: mb_results
+    path("*_output.txt"), emit: mb_results
     path "*.version.txt"          , emit: version
 
     script:
@@ -44,7 +44,7 @@ process MAGICBLAST {
         -query ${reads[0]} \\
         -query_mate ${reads[1]} \\
         -db ${db}/${db.simpleName} \\
-        -out ${prefix} \\
+        -out ${prefix}_output.txt \\
 
     magicblast -version | head -1 | awk '{print \$2}' > ${software}.version.txt
     """
