@@ -44,7 +44,7 @@ process MAGICBLAST {
         -query ${reads[0]} \\
         -query_mate ${reads[1]} \\
         -db ${db}/${db.simpleName} \\
-        -out ${prefix}.gz \\
+        -out ${prefix} \\
 
     magicblast -version | head -1 | awk '{print \$2}' > ${software}.version.txt
     """
