@@ -23,6 +23,7 @@ if (params.input) {
     // db_files = Channel.fromPath('/home/nikitinp/lizards/pipeline/magicblast_db/*')
     // db = Channel.fromList( ['/home/nikitinp/lizards/pipeline/magicblast_db/ref_prok_rep_genomes.00', '/home/nikitinp/lizards/pipeline/magicblast_db/ref_prok_rep_genomes.01'] )
     db_dir = Channel.fromPath('/home/nikitinp/lizards/pipeline/magicblast_db/*', type: 'dir' )
+    primer = file('/home/nikitinp/lizards/pipeline/primers/primer.fasta')
     // db_dir = file('/home/nikitinp/lizards/pipeline/magicblast_db/ref_viroids_rep_genomes')
 
 } else { 
@@ -78,6 +79,8 @@ include { MAGICBLAST  } from '../modules/local/magicblast'  addParams( options: 
 
 include { PARSE_MAGICBLAST  } from '../modules/local/parse_magicblast'  addParams( options: modules['parse_magicblast'] )
 
+include { TRIMMOMATIC  } from '../modules/local/trimmomatic'  addParams( options: modules['trimmomatic'] )
+
 // include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
 
 /*
@@ -115,6 +118,11 @@ workflow DAREVSKIA {
 
     PARSE_MAGICBLAST (
         MAGICBLAST.out.mb_results
+    )
+
+    TRIMMOMATIC (
+        INPUT_CHECK.out.reads,
+        primer
     )
 
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
