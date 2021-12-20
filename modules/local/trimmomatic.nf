@@ -23,7 +23,8 @@ process TRIMMOMATIC {
     each path(primer)
 
     output:
-    tuple val(meta), path("*_trimmed_*_p.fastq.gz"), emit: trimmed_reads_p
+    tuple val(meta), path("*_trimmed_f_p.fastq.gz"), emit: trimmed_reads_f_p
+    tuple val(meta), path("*_trimmed_r_p.fastq.gz"), emit: trimmed_reads_r_p
     tuple val(meta), path("*_trimmed_*_u.fastq.gz"), emit: trimmed_reads_u
     path "*_trimlog.txt" , emit: trimlog
     path "*.version.txt"          , emit: version

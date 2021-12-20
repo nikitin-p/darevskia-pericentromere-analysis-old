@@ -27,8 +27,6 @@ process INTERLACE_FASTA {
     tuple val(meta), path(reads)
     // each path(db)
     // path(db_files)
-    path(magicblast_output)
-    TRIMMOMATIC.out.trimmed_reads
 
     output:
     // path("*_output.txt"), emit: mb_result
@@ -54,6 +52,13 @@ process INTERLACE_FASTA {
         head -5 |
         awk -F" " -v var="\${READCOUNT}" '{print (\$1 / var * 100) "% " \$2}' > \\
         ${input_name}_histogram.txt
+
+    sed -n '1~4s/^@/>/p;2~4p' N_f_p.fastq > N_f_p.fasta
+    sed -n '1~4s/^@/>/p;2~4p' N_r_p.fastq > N_r_p.fasta
+
+    <N_f_p.fasta awk '{if ($0 ~ /^>/) {printf ">" (NR + 1) / 2 "f|"} else {print}}' > N_R1.fa.txt
+    <N_r_p.fasta awk '{if ($0 ~ /^>/) {printf ">" (NR + 1) / 2 "r|"} else {print}}' > N_R2.fa.txt
+    cat N_R{1,2}.fa.txt | sort | tr "|" "\n" > N.fasta
     """
 
 }

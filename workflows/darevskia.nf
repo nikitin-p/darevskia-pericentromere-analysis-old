@@ -128,7 +128,8 @@ workflow DAREVSKIA {
     )
 
     // INTERLACE_FASTA (
-    //     TRIMMOMATIC.out.trimmed_reads_p
+    //     TRIMMOMATIC.out.trimmed_reads_f_p,
+    //     TRIMMOMATIC.out.trimmed_reads_r_p
     // )
 
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
