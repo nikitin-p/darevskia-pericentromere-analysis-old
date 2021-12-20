@@ -9,7 +9,7 @@ options        = initOptions([:])
 process INTERLACE_FASTA {
     // tag "$meta.id"
     // tag "$input_name"
-    tag "${trimSuffix(magicblast_output.simpleName, '_output')}"
+    tag "${trimSuffix(forward_reads.baseName, '_f_p.fastq.gz')}"
     label 'process_low'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
