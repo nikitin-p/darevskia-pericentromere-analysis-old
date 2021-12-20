@@ -1,6 +1,6 @@
 // Import generic module functions
 include { initOptions; saveFiles; getSoftwareName } from './functions'
-// include { trimSuffix } from './custom_functions'
+include { trimSuffix } from './custom_functions'
 
 params.options = [:]
 // options        = initOptions(params.options)
@@ -24,41 +24,39 @@ process INTERLACE_FASTA {
 
     input:
     // path(paired_fastq)
-    tuple val(meta), path(reads)
+    tuple val(meta), path(forward_reads)
+    tuple val(meta), path(reverse_reads)
     // each path(db)
     // path(db_files)
 
     output:
-    // path("*_output.txt"), emit: mb_result
-    path("*_histogram.txt"), emit: mb_histogram
+    path("*.fasta"), emit: interlaced_reads
+    // path("*_histogram.txt"), emit: mb_histogram
     // path "*.version.txt"          , emit: version
 
     script:
     // def software = getSoftwareName(task.process)
-    // def prefix   = "${trimSuffix(reads[0].baseName, '_R1.fastq.gz')}_${trimSuffix(db, '.tar.gz')}"
-    // def prefix   = "${reads[0].simpleName}_${db.simpleName}"
-    def input_name  = "${trimSuffix(magicblast_output.simpleName, '_output')}"
+    def prefix   = "${trimSuffix(forward_reads.baseName, '_f_p.fastq.gz')}"
+    def prefix_forward   = "${forward_reads.simpleName}"
+    def prefix_reverse   = "${reverse_reads.simpleName}"
+    // def input_name  = "${trimSuffix(magicblast_output.simpleName, '_output')}"
 
     """
-    READCOUNT=`<${magicblast_output} \\
-        tail -n +4 | \\
-        wc -l`
-    <${magicblast_output} \\
-        tail -n +4 | \\
-        awk '{print \$2}' | \\
+    gzip -d ${forward_reads} | \\
+        sed -n '1~4s/^@/>/p;2~4p' > ${prefix_forward}.fa
+
+    gzip -d ${reverse_reads} | \\
+        sed -n '1~4s/^@/>/p;2~4p' > ${prefix_reverse}.fa
+
+    <${prefix_forward}.fa \\
+        awk '{if (\$0 ~ /^>/) {printf ">" (NR + 1) / 2 "f|"} else {print}}' > ${prefix_forward}.fa.txt
+
+    <${prefix_reverse}.fa \\
+        awk '{if (\$0 ~ /^>/) {printf ">" (NR + 1) / 2 "r|"} else {print}}' > ${prefix_reverse}.fa.txt
+
+    cat ${prefix_forward}.fa.txt ${prefix_reverse}.fa.txt | \\
         sort | \\
-        uniq -c | \\
-        sort -k1,1nr | \\
-        head -5 |
-        awk -F" " -v var="\${READCOUNT}" '{print (\$1 / var * 100) "% " \$2}' > \\
-        ${input_name}_histogram.txt
-
-    sed -n '1~4s/^@/>/p;2~4p' N_f_p.fastq > N_f_p.fasta
-    sed -n '1~4s/^@/>/p;2~4p' N_r_p.fastq > N_r_p.fasta
-
-    <N_f_p.fasta awk '{if ($0 ~ /^>/) {printf ">" (NR + 1) / 2 "f|"} else {print}}' > N_R1.fa.txt
-    <N_r_p.fasta awk '{if ($0 ~ /^>/) {printf ">" (NR + 1) / 2 "r|"} else {print}}' > N_R2.fa.txt
-    cat N_R{1,2}.fa.txt | sort | tr "|" "\n" > N.fasta
+        tr "|" "\n" > ${prefix}.fasta
     """
 
 }
