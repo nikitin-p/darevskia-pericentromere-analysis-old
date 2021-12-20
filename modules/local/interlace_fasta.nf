@@ -9,7 +9,7 @@ options        = initOptions([:])
 process INTERLACE_FASTA {
     // tag "$meta.id"
     // tag "$input_name"
-    tag "${trimSuffix(forward_reads.baseName, '_f_p.fastq.gz')}"
+    tag "${trimSuffix(forward_reads.simpleName, '_f_p')}"
     label 'process_low'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
@@ -36,7 +36,7 @@ process INTERLACE_FASTA {
 
     script:
     // def software = getSoftwareName(task.process)
-    def prefix   = "${trimSuffix(forward_reads.baseName, '_f_p.fastq.gz')}"
+    def prefix   = "${trimSuffix(forward_reads.simpleName, '_f_p')}"
     def prefix_forward   = "${forward_reads.simpleName}"
     def prefix_reverse   = "${reverse_reads.simpleName}"
     // def input_name  = "${trimSuffix(magicblast_output.simpleName, '_output')}"
