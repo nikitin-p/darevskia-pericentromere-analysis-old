@@ -43,10 +43,12 @@ process INTERLACE_FASTA {
 
     """
     gzip -d ${forward_reads} | \\
-        sed -n '1\~4s/^@/>/p;2\~4p' > ${prefix_forward}.fa
+        awk 'NR%4==1||NR%4==2' | \\
+        tr '@' '>' > ${prefix_forward}.fa
 
     gzip -d ${reverse_reads} | \\
-        sed -n '1\~4s/^@/>/p;2\~4p' > ${prefix_reverse}.fa
+        awk 'NR%4==1||NR%4==2' | \\
+        tr '@' '>' > ${prefix_reverse}.fa
 
     <${prefix_forward}.fa \\
         awk '{if (\$0 ~ /^>/) {printf ">" (NR + 1) / 2 "f|"} else {print}}' > ${prefix_forward}.fa.txt
