@@ -42,12 +42,13 @@ process INTERLACE_FASTA {
     // def input_name  = "${trimSuffix(magicblast_output.simpleName, '_output')}"
 
     """
-    gzip -d ${forward_reads} | \\
-        awk 'NR%4==1||NR%4==2' | \\
+    gzip -d ${forward_reads}
+    gzip -d ${reverse_reads}
+
+    awk 'NR%4==1||NR%4==2' ${forward_reads.baseName} | \\
         tr '@' '>' > ${prefix_forward}.fa
 
-    gzip -d ${reverse_reads} | \\
-        awk 'NR%4==1||NR%4==2' | \\
+    awk 'NR%4==1||NR%4==2' ${reverse_reads.baseName} | \\
         tr '@' '>' > ${prefix_reverse}.fa
 
     <${prefix_forward}.fa \\
