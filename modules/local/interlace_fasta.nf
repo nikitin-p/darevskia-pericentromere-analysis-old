@@ -52,13 +52,14 @@ process INTERLACE_FASTA {
         tr '@' '>' > ${prefix_reverse}.fa
 
     <${prefix_forward}.fa \\
-        awk '{if (\$0 ~ /^>/) {printf ">" (NR + 1) / 2 "f|"} else {print}}' > ${prefix_forward}.fa.txt
+        awk '{if (\$0 ~ /^>/) {printf (NR + 1) / 2 " f|"} else {print}}' > ${prefix_forward}.fa.txt
 
     <${prefix_reverse}.fa \\
-        awk '{if (\$0 ~ /^>/) {printf ">" (NR + 1) / 2 "r|"} else {print}}' > ${prefix_reverse}.fa.txt
+        awk '{if (\$0 ~ /^>/) {printf (NR + 1) / 2 " r|"} else {print}}' > ${prefix_reverse}.fa.txt
 
     cat ${prefix_forward}.fa.txt ${prefix_reverse}.fa.txt | \\
-        sort | \\
+        sort -k1,1n | \\
+        awk -F' ' '{print ">" \$1 \$2}' \\
         tr "|" "\n" > ${prefix}.fasta
     """
 
