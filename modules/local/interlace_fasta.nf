@@ -59,8 +59,8 @@ process INTERLACE_FASTA {
 
     cat ${prefix_forward}.fa.txt ${prefix_reverse}.fa.txt | \\
         sort -k1,1n | \\
-        awk -F' ' '{print ">" \$1 \$2}' \\
-        tr "|" "\n" > ${prefix}.fasta
+        awk -F' ' '{print ">" \$1 \$2}' | \\
+        tr '|' '\\n' > ${prefix}.fasta
     """
 
 }
