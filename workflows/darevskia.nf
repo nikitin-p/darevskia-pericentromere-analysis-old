@@ -81,6 +81,8 @@ include { PARSE_MAGICBLAST  } from '../modules/local/parse_magicblast'  addParam
 
 include { TRIMMOMATIC  } from '../modules/local/trimmomatic'  addParams( options: modules['trimmomatic'] )
 
+// include { INTERLACE_FASTA  } from '../modules/local/interlace_fasta'  addParams( options: modules['interlace_fasta'] )
+
 // include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
 
 /*
@@ -124,6 +126,10 @@ workflow DAREVSKIA {
         INPUT_CHECK.out.reads,
         primer
     )
+
+    // INTERLACE_FASTA (
+    //     TRIMMOMATIC.out.trimmed_reads_p
+    // )
 
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
     
